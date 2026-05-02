@@ -5,7 +5,17 @@ import matplotlib.patches as patches
 from PIL import Image
 import time
 import random
+import json
+import uuid
 import plotly.graph_objects as go
+from sol_framework import (
+    CONDITION_FEATURES,
+    build_session_export,
+    condition_supports,
+    normalised_sequence,
+    parse_sequence,
+    score_explanation,
+)
 
 
 class Quaternion:
@@ -266,11 +276,8 @@ class Cube:
         Apply a sequence of moves
         sequence: move sequence string, e.g., "R U R' U'"
         """
-        moves = sequence.split()
-        for move in moves:
-            face = move[0]
-            direction = -1 if "'" in move else 1
-            self.turn_face(face, direction)
+        for move in parse_sequence(sequence):
+            self.turn_face(move.face, move.direction)
     
     def get_current_state(self):
         return np.copy(self.state)
@@ -854,3 +861,94 @@ if 'selected_case' in st.session_state:
                             # st.write(f"Correct answer is: {st.session_state.correct_answer}")
                 else:
                     st.warning("Please select an answer first!")
+
+st.markdown("---")
+st.subheader("Nature SoL Research Evidence")
+
+research_condition = st.selectbox(
+    "Research condition",
+    ["A", "B", "C"],
+    index=2,
+    help="A: manipulation only; B: manipulation plus comparison; C: comparison plus notation and explanation.",
+)
+if not isinstance(research_condition, str) or research_condition not in CONDITION_FEATURES:
+    research_condition = "C"
+
+feature_cols = st.columns(3)
+with feature_cols[0]:
+    st.markdown(f"**Comparison:** {'enabled' if condition_supports(research_condition, 'comparison') else 'disabled'}")
+with feature_cols[1]:
+    st.markdown(f"**Notation:** {'enabled' if condition_supports(research_condition, 'notation') else 'disabled'}")
+with feature_cols[2]:
+    st.markdown(f"**Transfer:** {'enabled' if condition_supports(research_condition, 'transfer') else 'disabled'}")
+
+if condition_supports(research_condition, "comparison"):
+    st.markdown(
+        "Compare `U^4`, `R R'`, `U^2`, and `F^4`: what is preserved, undone, repeated, or returned to identity?"
+    )
+
+notation_input = st.text_input(
+    "Symbolic redescription",
+    value="U^4 = e" if condition_supports(research_condition, "notation") else "",
+    help="Use notation to name and compress a relation rather than just list moves.",
+)
+explanation_input = st.text_area(
+    "Explanation evidence",
+    value="Four repeated turns return to identity and preserve the cyclic relation."
+    if condition_supports(research_condition, "explanation")
+    else "",
+)
+transfer_choice = st.selectbox(
+    "Transfer domain",
+    ["robot rotation", "clock cycle", "modular arithmetic"],
+    help="Choose a surface-different system that preserves the same relation.",
+)
+if not isinstance(notation_input, str):
+    notation_input = ""
+if not isinstance(explanation_input, str):
+    explanation_input = ""
+if not isinstance(transfer_choice, str):
+    transfer_choice = "robot rotation"
+
+explanation_score = score_explanation(explanation_input)
+st.write(
+    f"Relational explanation score: {explanation_score['score']}/100 "
+    f"(orientation: {explanation_score['orientation']})"
+)
+
+audit_session_id = getattr(st.session_state, "audit_session_id", None)
+if not isinstance(audit_session_id, str):
+    audit_session_id = str(uuid.uuid4())
+    st.session_state.audit_session_id = audit_session_id
+
+rotation_sequence_for_export = getattr(st.session_state, "rotation_sequence", "U^4")
+if not isinstance(rotation_sequence_for_export, str):
+    rotation_sequence_for_export = "U^4"
+current_sequence = normalised_sequence(rotation_sequence_for_export)
+audit_events = [
+    {"type": "condition_start", "condition": research_condition, "payload": {"condition": research_condition}},
+    {"type": "notation", "condition": research_condition, "payload": {"notation": notation_input}},
+    {"type": "transfer", "condition": research_condition, "payload": {"domain": transfer_choice}},
+]
+audit_export = build_session_export(
+    session_id=audit_session_id,
+    condition=research_condition,
+    role="learner",
+    sequence=current_sequence,
+    events=audit_events,
+    explanation=explanation_input,
+    notation=notation_input,
+    transfer_mapping={
+        "state": f"{transfer_choice} state",
+        "operation": "repeat the operation",
+        "identity": "return to the starting state",
+        "preserved_relation": "the relation remains valid across domains",
+    },
+)
+
+st.download_button(
+    "Download research evidence JSON",
+    data=json.dumps(audit_export, indent=2),
+    file_name="embodied_ai_tutor_research_evidence.json",
+    mime="application/json",
+)

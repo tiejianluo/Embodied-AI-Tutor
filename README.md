@@ -366,6 +366,27 @@ See `requirements.txt` for exact version specifications.
 
 ---
 
+## Audit and Test Gates
+
+This repository now includes claim-aware tests for the Nature SoL roadmap.
+
+```bash
+python testcode/run_all_tests.py
+```
+
+The command runs:
+
+- legacy cube and activity checks;
+- unit tests for notation parsing, condition flags, explanation scoring, transfer scoring, and export metadata;
+- system tests for a Condition C learning flow;
+- acceptance tests for C1-C8 paper-claim traceability.
+
+GitHub Actions runs the same command on push and pull request. Pull requests
+should fill in `.github/pull_request_template.md` with the milestone, related
+claims, unit/system/acceptance evidence, and any deferred risks.
+
+---
+
 ## 📄 License
 
 This project is licensed under the **MIT License**.
