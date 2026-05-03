@@ -7,7 +7,9 @@
 
 An interactive web application that transforms Rubik's Cube manipulation into learnable algebraic group structure through embodied AI tutoring. This project implements the educational framework from the paper **"An Embodied AI Tutor that Turns Rubik’s Cube Interaction into Learnable Group Structure"**, demonstrating how abstract mathematical concepts can emerge from concrete physical interaction.
 
-**Live Demo:** [https://cube-tutor.streamlit.app/](https://cube-tutor.streamlit.app/)
+**Public repository:** [https://github.com/tiejianluo/Embodied-AI-Tutor](https://github.com/tiejianluo/Embodied-AI-Tutor)
+
+**Public app:** deploy from this repository on Streamlit Community Cloud with `app.py` as the entry file.
 
 ---
 
@@ -55,8 +57,8 @@ An interactive web application that transforms Rubik's Cube manipulation into le
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/TurtleLiu/Rubiks-Cube-AI-Tutor.git
-   cd Rubiks-Cube-AI-Tutor
+   git clone https://github.com/tiejianluo/Embodied-AI-Tutor.git
+   cd Embodied-AI-Tutor
    ```
 
 2. **Create and activate a virtual environment:**
@@ -301,10 +303,11 @@ Technically, the tutor learns from action–consequence data. From tuples $(o_t,
 Follow the [Quick Start](#quick-start) instructions above.
 
 ### Streamlit Cloud Deployment
-1. Push code to GitHub repository
+1. Push code to `https://github.com/tiejianluo/Embodied-AI-Tutor`
 2. Connect repository to [Streamlit Cloud](https://streamlit.io/cloud)
-3. Set `app.py` as main file
-4. Deploy with default settings
+3. Select branch `main`
+4. Set `app.py` as main file
+5. Deploy with default settings
 
 ### Docker Deployment (Optional)
 ```dockerfile
