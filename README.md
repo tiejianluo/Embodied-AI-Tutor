@@ -9,7 +9,7 @@ An interactive web application that transforms Rubik's Cube manipulation into le
 
 **Public repository:** [https://github.com/tiejianluo/Embodied-AI-Tutor](https://github.com/tiejianluo/Embodied-AI-Tutor)
 
-**Public app:** deploy from this repository on Streamlit Community Cloud with `app.py` as the entry file.
+**Public app:** [https://embodied-ai-tutor.streamlit.app/](https://embodied-ai-tutor.streamlit.app/)
 
 ---
 
@@ -418,10 +418,12 @@ THE SOFTWARE.
 
 ---
 
-## 📞 Contact 
+## 📞 Contact
 
 For questions about the research:
-- **Corresponding Author**: Tiejian Luo (tjluo@ucas.ac.cn)
+
+Corresponding Author: Tiejian Luo (tjluo@ucas.ac.cn)
+
 ---
 
 *This tutor is an educational tool for exploring algebraic concepts through embodied interaction. While based on peer-reviewed research, it uses simplified representations for educational purposes.*
