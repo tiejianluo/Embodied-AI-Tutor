@@ -418,23 +418,10 @@ THE SOFTWARE.
 
 ---
 
-## 📞 Contact & Citation
+## 📞 Contact 
 
 For questions about the research:
 - **Corresponding Author**: Tiejian Luo (tjluo@ucas.ac.cn)
-
-If you use this tutor in your research or teaching, please cite:
-
-```bibtex
-@article{luo2026embodied,
-  title={An Embodied AI Tutor that Turns Rubik's Cube Interaction into Learnable Group Structure},
-  author={Luo, Tiejian and others},
-  journal={Nature Science of Learning},
-  year={2026},
-  publisher={Nature Research}
-}
-```
-
 ---
 
 *This tutor is an educational tool for exploring algebraic concepts through embodied interaction. While based on peer-reviewed research, it uses simplified representations for educational purposes.*
